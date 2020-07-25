@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-
 import Months from './Months'
 
 export default function App() {
 	let [error, setError] = useState(null)
 	let [isLoaded, setIsLoaded] = useState(false)
-	let [users, setUsers] = useState([])
-
+	let [data, setData] = useState([])
 
 
 	useEffect(() => {
@@ -15,7 +13,7 @@ export default function App() {
 			.then(
 				(result) => {
 					setIsLoaded(true);
-					setUsers(result);
+					setData(result);
 				},
 				(error) => {
 					setIsLoaded(true);
@@ -25,7 +23,7 @@ export default function App() {
 	}, [])
 
 
-	const groupedUsers = users.reduce((acc, key) => {
+	const groupMonths = data.reduce((acc, key) => {
 		acc[new Date(key.dob).getMonth()].users.push(key);
 		return acc;
 	},
@@ -35,11 +33,6 @@ export default function App() {
 		}))
 	);
 
-
-
-	console.log(groupedUsers)
-
-
 	if (error) {
 		return <div>Error: {error.message}</div>;
 	} else if (!isLoaded) {
@@ -47,7 +40,7 @@ export default function App() {
 	} else {
 		return (
 			<div className='container'>
-				{/* {<Months groupedUsers={groupedUsers} />} */}
+				{<Months groupMonths={groupMonths} />}
 			</div>
 		);
 	}
