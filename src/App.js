@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Months from './Months'
+
+export default function App() {
+	let [error, setError] = useState(null)
+	let [isLoaded, setIsLoaded] = useState(false)
+	let [users, setUsers] = useState([])
+
+
+
+	useEffect(() => {
+		fetch("https://yalantis-react-school-api.yalantis.com/api/task0/users")
+			.then(res => res.json())
+			.then(
+				(result) => {
+					setIsLoaded(true);
+					setUsers(result);
+				},
+				(error) => {
+					setIsLoaded(true);
+					setError(error);
+				}
+			)
+	}, [])
+
+
+	const groupedUsers = users.reduce((acc, key) => {
+		acc[new Date(key.dob).getMonth()].users.push(key);
+		return acc;
+	},
+		[...Array(12)].map((key, i) => ({
+			month: new Date(0, i).toLocaleString('ru-RU', { month: 'long' }),
+			users: []
+		}))
+	);
+
+
+
+	console.log(groupedUsers)
+
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
+	} else if (!isLoaded) {
+		return <div>Loading...</div>;
+	} else {
+		return (
+			<div className='container'>
+				{/* {<Months groupedUsers={groupedUsers} />} */}
+			</div>
+		);
+	}
 }
-
-export default App;
