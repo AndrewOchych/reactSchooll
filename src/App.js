@@ -5,6 +5,7 @@ export default function App() {
 	let [error, setError] = useState(null)
 	let [isLoaded, setIsLoaded] = useState(false)
 	let [data, setData] = useState([])
+	let [peopoles, setPeopoles] = useState([])
 
 
 	useEffect(() => {
@@ -33,6 +34,10 @@ export default function App() {
 		}))
 	);
 
+	function showUsers(id) {
+		setPeopoles(data.filter(user => new Date(user.dob).toLocaleString('ru-RU', { month: 'long' }) === id))
+	}
+
 	if (error) {
 		return <div>Error: {error.message}</div>;
 	} else if (!isLoaded) {
@@ -40,7 +45,11 @@ export default function App() {
 	} else {
 		return (
 			<div className='container'>
-				{<Months groupMonths={groupMonths} />}
+				{<Months
+					groupMonths={groupMonths}
+					peopoles={peopoles}
+					showUsers={showUsers}
+				/>}
 			</div>
 		);
 	}

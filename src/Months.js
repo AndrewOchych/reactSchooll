@@ -1,32 +1,48 @@
-import React, { useState } from "react"
+import React from "react"
 import './Months.css'
 
 
-export default function Months({ groupMonths }) {
+export default function Months({ groupMonths, showUsers, peopoles }) {
 
   return (
-
-    <div className='months'>
-      {groupMonths.map(data => (
-        <div
-          key={data.month}
-          className='month'
-          style={{
-            backgroundColor:
-              data.users.length < 3 ? 'gray' :
-                data.users.length < 7 ? 'blue' :
-                  data.users.length < 11 ? 'green' : 'red'
-          }}
-        >
-          <h2>
-            {data.month}
-          </h2>
-        </div>
-      ))}
+    <div>
+      <div className='months'>
+        {groupMonths.map(data => (
+          <div
+            key={data.month}
+            className='month'
+            onMouseOver={_ => showUsers(data.month)}
+            style={{
+              backgroundColor:
+                data.users.length < 3 ? 'gray' :
+                  data.users.length < 7 ? 'blue' :
+                    data.users.length < 11 ? 'green' : 'red'
+            }}
+          >
+            <h2>
+              {data.month}
+            </h2>
+          </div>
+        ))}
+      </div>
+      <div style={{
+        marginTop: '10px',
+        textAlign: "center"
+      }}>
+        {
+          peopoles.map(peopole =>
+            <div
+              key={peopole.id}
+            >
+              {peopole.firstName}
+            </div>
+          )
+        }
+      </div>
     </div>
+
   )
 }
-
 
 
 
