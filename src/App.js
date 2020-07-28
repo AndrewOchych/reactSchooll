@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import Months from './Months'
+import Months from './components/Months/Months'
+import { BASE_API_URL } from './constants/api';
 
 export default function App() {
 	let [error, setError] = useState(null)
 	let [isLoaded, setIsLoaded] = useState(false)
 	let [data, setData] = useState([])
-	let [peopoles, setPeopoles] = useState([])
-
 
 	useEffect(() => {
-		fetch("https://yalantis-react-school-api.yalantis.com/api/task0/users")
+		fetch(`${BASE_API_URL}api/task0/users`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -23,20 +22,15 @@ export default function App() {
 			)
 	}, [])
 
-
-	const groupMonths = data.reduce((acc, key) => {
-		acc[new Date(key.dob).getMonth()].users.push(key);
+	const groupedData = data.reduce((acc, user) => {
+		acc[new Date(user.dob).getMonth()].users.push(user.firstName);
 		return acc;
 	},
-		[...Array(12)].map((key, i) => ({
-			month: new Date(0, i).toLocaleString('ru-RU', { month: 'long' }),
+		[...Array(12)].map((j, i) => ({
+			month: new Date(0, i).toLocaleString('en-EN', { month: 'short' }),
 			users: []
 		}))
 	);
-
-	function showUsers(id) {
-		setPeopoles(data.filter(user => new Date(user.dob).toLocaleString('ru-RU', { month: 'long' }) === id))
-	}
 
 	if (error) {
 		return <div>Error: {error.message}</div>;
@@ -46,9 +40,7 @@ export default function App() {
 		return (
 			<div className='container'>
 				{<Months
-					groupMonths={groupMonths}
-					peopoles={peopoles}
-					showUsers={showUsers}
+					userPerMonth={groupedData}
 				/>}
 			</div>
 		);

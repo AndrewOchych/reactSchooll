@@ -1,0 +1,1 @@
+export const BASE_API_URL = 'https://yalantis-react-school-api.yalantis.com/';
